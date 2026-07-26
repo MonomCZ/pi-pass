@@ -1,4 +1,4 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, render_template
 import subprocess
 import time
 
@@ -7,9 +7,7 @@ def create_portal():
 
     @app.route('/')
     def index():
-        return """
-        hello
-        """
+        return render_template('index.html')
 
     @app.route('/generate_204')
     @app.route('/gen_204')
