@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request
 import subprocess
 import time
 
@@ -8,6 +8,12 @@ def create_portal():
     @app.route('/')
     def index():
         return render_template('index.html')
+    
+    @app.route('/upload', methods=['POST'])
+    def upload():
+        file = request.files['image']
+        file.save(f'Functions/static/{file.filename}')
+        return "Uploaded!"
 
     @app.route('/generate_204')
     @app.route('/gen_204')
