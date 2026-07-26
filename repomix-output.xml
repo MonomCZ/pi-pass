@@ -68,57 +68,6 @@ bash UPDATE.sh
 cd ~/pi-pass
 </file>
 
-<file path="Functions/portal.py">
-from flask import Flask, redirect
-
-def create_portal():
-    app = Flask(__name__)
-
-    @app.route('/')
-    def index():
-        return """
-        hello
-        """
-
-    @app.route('/generate_204')
-    def android():
-        return redirect('/')
-
-    @app.route('/hotspot-detect.html')
-    def apple():
-        return redirect('/')
-
-    @app.route('/<path:path>')
-    def catch(path):
-        return redirect('/')
-
-    app.run(host='0.0.0.0', port=80)
-</file>
-
-<file path="Utility/SETUP.sh">
-sudo apt update
-sudo apt upgrade -y
-
-sudo apt install -y dnsmasq python3-flask iptables
-
-echo "interface=wlan0
-
-dhcp-range=10.42.0.10,10.42.0.100,12h
-
-address=/#/10.42.0.1
-
-dhcp-option=3,10.42.0.1
-dhcp-option=6,10.42.0.1" | sudo tee /etc/dnsmasq.d/captive.conf
-
-sudo systemctl restart dnsmasq
-
-sudo sysctl -w net.ipv4.ip_forward=1
-
-sudo iptables -t nat -D PREROUTING -i wlan0 -p tcp --dport 80 -j DNAT --to-destination 10.42.0.1:80 2>/dev/null
-
-sudo iptables -t nat -A PREROUTING -i wlan0 -p tcp --dport 80 -j DNAT --to-destination 10.42.0.1:80
-</file>
-
 <file path="Utility/UPDATE.sh">
 git fetch origin
 git reset --hard origin/main
@@ -351,6 +300,70 @@ __marimo__/
 .streamlit/secrets.toml
 </file>
 
+<file path="Functions/portal.py">
+from flask import Flask, redirect
+
+def create_portal():
+    app = Flask(__name__)
+
+    @app.route('/')
+    def index():
+        return """
+        hello
+        """
+
+    @app.route('/generate_204')
+    @app.route('/gen_204')
+    def android():
+        return redirect('/')
+
+    @app.route('/hotspot-detect.html')
+    @app.route('/library/test/success.html')
+    def apple():
+        return redirect('/')
+
+    @app.route('/ncsi.txt')
+    @app.route('/connecttest.txt')
+    @app.route('/redirect')
+    def windows():
+        return redirect('/')
+
+    @app.route('/success.txt')
+    def linux():
+        return redirect('/')
+
+    @app.route('/<path:path>')
+    def catch(path):
+        return redirect('/')
+
+    app.run(host='0.0.0.0', port=8080, debug=False,use_reloader=False)
+</file>
+
+<file path="Utility/SETUP.sh">
+sudo apt update
+sudo apt upgrade -y
+
+sudo apt install -y dnsmasq python3-flask iptables network-manager
+
+echo "interface=wlan0
+
+dhcp-range=10.42.0.10,10.42.0.100,12h
+
+address=/#/10.42.0.1
+
+dhcp-option=3,10.42.0.1
+dhcp-option=6,10.42.0.1" | sudo tee /etc/dnsmasq.d/captive.conf
+
+sudo systemctl restart dnsmasq
+
+sudo sysctl -w net.ipv4.ip_forward=1
+echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-pipass.conf
+
+sudo iptables -t nat -D PREROUTING -i wlan0 -p tcp --dport 80 -j DNAT --to-destination 10.42.0.1:8080 2>/dev/null
+
+sudo iptables -t nat -A PREROUTING -i wlan0 -p tcp --dport 80 -j DNAT --to-destination 10.42.0.1:8080
+</file>
+
 <file path="Main/main.py">
 import Functions.hotspot as hotspot
 import Functions.portal as portal
@@ -359,11 +372,11 @@ import threading
 hotspot.start_hotspot()
 
 portal_thread = threading.Thread(
-    target=portal.create_portal,
-    daemon=True
+    target=portal.create_portal
 )
 
 portal_thread.start()
+portal_thread.join()
 </file>
 
 <file path="README.md">
