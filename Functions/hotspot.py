@@ -4,6 +4,8 @@ def start_hotspot():
     interface = 'wlan0'
     hotspot_name = 'MyHotspot'
 
+    subprocess.run(['sudo', 'nmcli', 'connection', 'delete', hotspot_name], stderr=subprocess.DEVNULL)
+
     subprocess.run([
         'sudo', 'nmcli', 'connection', 'add',
         'type', 'wifi',
