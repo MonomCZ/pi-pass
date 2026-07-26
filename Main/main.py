@@ -4,5 +4,9 @@ import threading
 
 hotspot.start_hotspot()
 
-portal_thread = threading.Thread(target=portal.create_portal)
+portal_thread = threading.Thread(
+    target=portal.create_portal,
+    daemon=True
+)
+
 portal_thread.start()

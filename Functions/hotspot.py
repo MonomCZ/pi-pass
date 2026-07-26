@@ -15,7 +15,7 @@ def start_hotspot():
     #makes it so the hotspot doesn't automatically start on boot
     subprocess.run(['sudo', 'nmcli', 'connection', 'modify', hotspot_name,'connection.autoconnect', 'no'], check=True)
     #removes the password :3
-    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'remove', '802-11-wireless-security'], check=True)
+    #subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'remove', '802-11-wireless-security'], check=True)
 
     #just starts it up
     subprocess.run(['sudo','nmcli', 'connection', 'up', hotspot_name], check=True)

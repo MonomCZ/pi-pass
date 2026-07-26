@@ -52,14 +52,20 @@ Utility/
 README.md
 run.sh
 runupdatelol.sh
-structure.txt
 </directory_structure>
 
 <files>
 This section contains the contents of the repository's files.
 
-<file path="structure.txt">
+<file path="run.sh">
+cd ~/pi-pass
+PYTHONPATH=. python Main/main.py
+</file>
 
+<file path="runupdatelol.sh">
+cd Utility
+bash UPDATE.sh
+cd ~/pi-pass
 </file>
 
 <file path="Functions/portal.py">
@@ -74,6 +80,14 @@ def create_portal():
         hello
         """
 
+    @app.route('/generate_204')
+    def android():
+        return redirect('/')
+
+    @app.route('/hotspot-detect.html')
+    def apple():
+        return redirect('/')
+
     @app.route('/<path:path>')
     def catch(path):
         return redirect('/')
@@ -82,7 +96,10 @@ def create_portal():
 </file>
 
 <file path="Utility/SETUP.sh">
-sudo apt install dnsmasq python3-flask iptables
+sudo apt update
+sudo apt upgrade -y
+
+sudo apt install -y dnsmasq python3-flask iptables
 
 echo "interface=wlan0
 
@@ -97,10 +114,23 @@ sudo systemctl restart dnsmasq
 
 sudo sysctl -w net.ipv4.ip_forward=1
 
+sudo iptables -t nat -D PREROUTING -i wlan0 -p tcp --dport 80 -j DNAT --to-destination 10.42.0.1:80 2>/dev/null
+
 sudo iptables -t nat -A PREROUTING -i wlan0 -p tcp --dport 80 -j DNAT --to-destination 10.42.0.1:80
 </file>
 
+<file path="Utility/UPDATE.sh">
+git fetch origin
+git reset --hard origin/main
+git clean -fd
+echo 'Updated!'
+</file>
+
 <file path=".gitignore">
+#moje veci muhahah
+repomix-output
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -321,27 +351,19 @@ __marimo__/
 .streamlit/secrets.toml
 </file>
 
-<file path="run.sh">
-cd ~/pi-pass
-PYTHONPATH=. python Main/main.py
-</file>
-
-<file path="runupdatelol.sh">
-cd Utility
-bash UPDATE.sh
-cd ~/pi-pass
-</file>
-
 <file path="Main/main.py">
 import Functions.hotspot as hotspot
-hotspot.start_hotspot()
-</file>
+import Functions.portal as portal
+import threading
 
-<file path="Utility/UPDATE.sh">
-git fetch origin
-git reset --hard origin/main
-git clean -fd
-echo 'Updated!'
+hotspot.start_hotspot()
+
+portal_thread = threading.Thread(
+    target=portal.create_portal,
+    daemon=True
+)
+
+portal_thread.start()
 </file>
 
 <file path="README.md">
@@ -366,15 +388,16 @@ def start_hotspot():
     subprocess.run(['sudo','nmcli', 'connection', 'delete', hotspot_name], stderr=subprocess.DEVNULL)
     #creates a new one
     subprocess.run(['sudo','nmcli', 'connection', 'add', 'type', 'wifi', 'ifname', interface, 'con-name', hotspot_name,'ssid', hotspot_name], check=True)
+    #sets the ip (so it doesnt change so the captive portal thing doesnt break)
+    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'ipv4.addresses', '10.42.0.1/24'], check=True)
+    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'ipv4.gateway', '10.42.0.1','ipv4.dns', '10.42.0.1','ipv4.method', 'manual', ], check=True)
     #does *something* 
-    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'802-11-wireless.mode', 'ap','ipv4.method', 'manual', 'ipv6.method', 'ignore'], check=True)
+    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'802-11-wireless.mode', 'ap','ipv6.method', 'ignore'], check=True)
     #makes it so the hotspot doesn't automatically start on boot
     subprocess.run(['sudo', 'nmcli', 'connection', 'modify', hotspot_name,'connection.autoconnect', 'no'], check=True)
     #removes the password :3
-    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'remove', '802-11-wireless-security'], check=True)
-    #sets the ip (so it doesnt change so the captive portal thing doesnt break)
-    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'ipv4.addresses', '10.42.0.1/24'], check=True)
-    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'ipv4.gateway', '10.42.0.1','ipv4.dns', '10.42.0.1'], check=True)
+    #subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'remove', '802-11-wireless-security'], check=True)
+
     #just starts it up
     subprocess.run(['sudo','nmcli', 'connection', 'up', hotspot_name], check=True)
 </file>
