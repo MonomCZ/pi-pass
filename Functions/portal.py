@@ -11,8 +11,16 @@ def create_portal():
     
     @app.route('/upload', methods=['POST'])
     def upload():
+        if 'image' not in request.files:
+            return "No file"
+
         file = request.files['image']
+
+        if file.filename == '':
+            return "No file selected"
+
         file.save(f'Functions/static/{file.filename}')
+
         return "Uploaded!"
 
     @app.route('/generate_204')
