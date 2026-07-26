@@ -1,2 +1,2 @@
 # pi-pass
-cool pet like tamagothi i think 
+cool street pass like thing kinda
