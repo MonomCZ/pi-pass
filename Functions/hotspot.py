@@ -15,7 +15,7 @@ def start_hotspot():
         'sudo', 'nmcli', 'connection', 'modify', hotspot_name,
         '802-11-wireless.mode', 'ap',
         '802-11-wireless.band', 'bg',
-        '802-11-wireless-security.key-mgmt', 'none'
+        '802-11-wireless-security.key-mgmt', ''
     ])
 
     subprocess.run(['sudo', 'nmcli', 'connection', 'up', hotspot_name])
