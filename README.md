@@ -1,2 +1,2 @@
-# raspi-pet
+# pi-pass
 cool pet like tamagothi i think 
