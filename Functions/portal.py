@@ -9,6 +9,14 @@ def create_portal():
         hello
         """
 
+    @app.route('/generate204')
+    def android():
+        return
+
+    @app.route('/hotspot-detect.html')
+    def apple():
+        return
+
     @app.route('/<path:path>')
     def catch(path):
         return redirect('/')
