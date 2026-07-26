@@ -1,7 +1,9 @@
 # pi-pass
 cool street pass like thing kinda
 
-```git clone --recursive <repo-url>
-cd <repo>
-git pull
+```
+sudo apt install git
+cd ~
+git clone --recursive https://github.com/MonomCZ/pi-pass.git
+cd pi-pass
 ```
