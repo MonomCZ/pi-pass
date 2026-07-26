@@ -6,10 +6,12 @@ def start_hotspot():
 
     subprocess.run(['sudo','nmcli', 'connection', 'delete', hotspot_name], stderr=subprocess.DEVNULL)
 
-    subprocess.run(['sudo','nmcli', 'connection', 'add', 'type', 'wifi', 'ifname', interface, 'con-name', hotspot_name,'ssid', hotspot_name])
+    subprocess.run(['sudo','nmcli', 'connection', 'add', 'type', 'wifi', 'ifname', interface, 'con-name', hotspot_name,'ssid', hotspot_name], check=True)
 
-    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'802-11-wireless.mode', 'ap','ip4.method', 'shared', 'ipv6.method', 'ignore'])
+    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'802-11-wireless.mode', 'ap','ipv4.method', 'shared', 'ipv6.method', 'ignore'], check=True)
 
-    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'remove', '802-11-wireless-security'])
+    subprocess.run(['sudo', 'nmcli', 'connection', 'modify', hotspot_name,'connection.autoconnect', 'no'], check=True)
 
-    subprocess.run(['sudo','nmcli', 'connection', 'up', hotspot_name])
+    subprocess.run(['sudo','nmcli', 'connection', 'modify', hotspot_name,'remove', '802-11-wireless-security'], check=True)
+
+    subprocess.run(['sudo','nmcli', 'connection', 'up', hotspot_name], check=True)
