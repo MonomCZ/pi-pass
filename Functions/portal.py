@@ -37,8 +37,8 @@ def create_portal():
 
     app.run(host='0.0.0.0', port=8080, debug=False,use_reloader=False)
 
-def setup_portal():
-    subprocess.run(['sudo', 'systemctl', 'restart', 'dnsmasq'], check=True)
+def setup_portal(gateway_ip='10.42.0.1', portal_port=8080):
+    #subprocess.run(['sudo', 'systemctl', 'restart', 'dnsmasq'], check=True)
     subprocess.run(
         ['sudo', 'iptables', '-t', 'nat', '-D', 'PREROUTING',
          '-i', 'wlan0', '-p', 'tcp', '--dport', '80',
@@ -53,4 +53,5 @@ def setup_portal():
     )
 
 def restart_dnsmasq():
+    time.sleep(5)
     subprocess.run(['sudo', 'systemctl', 'restart', 'dnsmasq'], check=True)
