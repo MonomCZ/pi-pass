@@ -1,4 +1,4 @@
-import functions.hotspot as hotspot
+import Functions.hotspot as hotspot
 hotspot.start_hotspot()
 
 
