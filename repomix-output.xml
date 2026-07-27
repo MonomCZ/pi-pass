@@ -42,11 +42,11 @@ The content is organized as follows:
 <directory_structure>
 Functions/
   static/
-    linux-tux-1-logo-png-transparent-2235685042.png
+    cool_images/
+      linux-tux-1-logo-png-transparent-2235685042.png
     pozadi.png
   templates/
     index.html
-    pozadi.png
   hotspot.py
   portal.py
 Main/
@@ -339,44 +339,6 @@ cd pi-pass
 ```
 </file>
 
-<file path="Functions/templates/index.html">
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Portal</title>
-
-    <style>
-        body {
-            background-image: url("/static/pozadi.png");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            margin: 0;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-</head>
-
-<body>
-
-<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp">
-    <br>
-    <input type="submit" value="Upload">
-</form>
-
-<p>Open this address in your browser:</p>
-<p>http://10.42.0.1:8080</p>
-
-</body>
-</html>
-</file>
-
 <file path="Main/main.py">
 import Functions.hotspot as hotspot
 import Functions.portal as portal
@@ -394,17 +356,437 @@ portal_thread.start()
 portal_thread.join()
 </file>
 
+<file path="Functions/templates/index.html">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Portal</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        .portal-image {
+            width: 40vw;
+            max-width: 300px;
+
+            height: auto;
+
+            margin-bottom: 3vh;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.4);
+
+            object-fit: contain;
+        }
+        body {
+            background-image: url("/static/pozadi.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            height: 100vh;
+            margin: 0;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            font-family: Tahoma, Verdana, Geneva, sans-serif;
+        }
+
+
+
+        /* Frutiger Aero Button */
+        .frutiger-aero-button {
+
+            --hue: 220;
+            --sat: 0.3;
+            --glow-intensity: 0.75;
+
+
+            --fg: oklch(35% 0.16 245 / 0.85);
+
+            --bg: oklch(75% var(--sat) var(--hue) / 0.85);
+
+            --bg-dark: oklch(
+                45% var(--sat) var(--hue) / 0.75
+            );
+
+
+            --bottom-glow: radial-gradient(
+                farthest-corner at bottom center,
+                rgba(255,255,255,var(--glow-intensity)),
+                transparent
+            );
+
+
+            background-color: var(--bg);
+
+            background:
+                var(--bottom-glow),
+                linear-gradient(
+                    to bottom,
+                    var(--bg-dark),
+                    var(--bg)
+                );
+
+
+            border: none;
+
+            border-radius: 9999px;
+
+
+            box-shadow:
+                0 4px 4px rgba(0,0,0,0.4),
+                inset 0 1px rgba(255,255,255,0.7);
+
+
+
+            color: var(--fg);
+
+
+            font-family:
+                Tahoma,
+                Verdana,
+                Geneva,
+                sans-serif;
+
+
+            font-weight: 700;
+
+
+            text-shadow:
+                0 1px 0 rgba(255,255,255,0.8),
+                0 2px 6px rgba(0,80,200,0.35);
+
+
+
+            cursor: pointer;
+
+            position: relative;
+
+            transition: all 300ms ease;
+
+
+            user-select: none;
+            -webkit-user-select: none;
+
+
+
+            /* Responsive size */
+            padding: 2.5vw 6vw;
+
+            font-size: 5vw;
+
+
+
+            display: inline-block;
+
+            text-decoration: none;
+
+            overflow: hidden;
+
+            margin: 1vw;
+        }
+
+
+
+
+        /* Shine effect */
+        .frutiger-aero-button::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+
+            background: linear-gradient(
+                120deg,
+                transparent 30%,
+                rgba(255,255,255,0.45) 45%,
+                rgba(255,255,255,0.1) 55%,
+                transparent 70%
+            );
+
+
+            border-radius: inherit;
+
+            pointer-events: none;
+        }
+
+
+
+
+        /* Top highlight */
+        .frutiger-aero-button::after {
+
+            content: "";
+
+            position: absolute;
+
+
+            top: 4%;
+
+            left: 0.75em;
+
+
+            width: calc(100% - 1.5em);
+
+            height: 40%;
+
+
+
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.85),
+                rgba(255,255,255,0.15)
+            );
+
+
+
+            border-radius: inherit;
+
+            pointer-events: none;
+        }
+
+
+
+
+
+        .frutiger-aero-button:hover,
+        .frutiger-aero-button:focus {
+
+            box-shadow:
+                0 6px 8px rgba(0,0,0,0.4),
+                inset 0 1px rgba(255,255,255,0.8);
+
+
+            transform: translateY(-2px);
+        }
+
+
+
+
+        .frutiger-aero-button:active {
+
+            box-shadow:
+                0 2px 4px rgba(0,0,0,0.4);
+
+
+            transform: translateY(1px);
+        }
+
+
+
+
+        /* Hide file input */
+
+        .file-input {
+            display: none;
+        }
+
+
+
+
+
+        p {
+
+            color: white;
+
+            font-size: 4vw;
+
+            text-align: center;
+
+
+            text-shadow:
+                0 2px 4px rgba(0,0,0,0.7);
+        }
+
+
+
+
+
+        .address {
+
+            padding: 2vw 5vw;
+
+            border-radius: 4vw;
+
+
+            background:
+                rgba(255,255,255,0.15);
+
+
+            backdrop-filter: blur(8px);
+
+            color: white;
+
+            font-size: 4vw;
+        }
+
+
+
+
+
+        /* Extra tuning for small phones */
+
+        @media (max-width: 600px) {
+
+
+            .frutiger-aero-button {
+
+                font-size: 6vw;
+
+                padding: 3vw 8vw;
+
+                margin: 2vw;
+            }
+
+
+
+            p {
+
+                font-size: 5vw;
+            }
+
+
+
+            .address {
+
+                font-size: 4.5vw;
+
+                padding: 3vw 6vw;
+            }
+
+        }
+
+
+
+
+        /* Larger screens */
+
+        @media (min-width: 1000px) {
+
+
+            .frutiger-aero-button {
+
+                font-size: 1.2rem;
+
+                padding: 1em 3em;
+            }
+
+
+
+            p {
+
+                font-size: 18px;
+            }
+
+
+
+            .address {
+
+                font-size: 18px;
+
+                padding: 10px 20px;
+            }
+
+        }
+        
+    </style>
+</head>
+
+
+
+<body>
+    {% if random_image %}
+<img 
+    class="portal-image"
+    src="/static/cool_images/{{ random_image }}">
+{% endif %}
+
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+
+
+    <label class="frutiger-aero-button">
+
+        Choose Image
+
+        <input
+            class="file-input"
+            type="file"
+            name="image"
+            accept=".png,.jpg,.jpeg,.gif,.webp">
+
+    </label>
+
+
+
+    <button
+        type="submit"
+        class="frutiger-aero-button">
+
+        Upload
+
+    </button>
+
+
+</form>
+
+
+
+<p>
+    Open this address in your browser:
+</p>
+
+
+
+<p class="address">
+    http://10.42.0.1:8080
+</p>
+
+
+
+</body>
+</html>
+</file>
+
 <file path="Functions/portal.py">
 from flask import Flask, redirect, render_template, request
 import subprocess
 import time
+import os
+import random
 
 def create_portal():
     app = Flask(__name__)
 
     @app.route('/')
     def index():
-        return render_template('index.html')
+
+        image_folder='Functions/static/cool_images'
+        
+        images = [
+        f for f in os.listdir(image_folder)
+        if f.lower().endswith((
+            '.png',
+            '.jpg',
+            '.jpeg',
+            '.gif',
+            '.webp'
+        ))
+    ]
+        random_image = None
+        if images:
+            random_image = random.choice(images)
+
+        return render_template('index.html',random_image=random_image)
     
     @app.route('/upload', methods=['POST'])
     def upload():
@@ -416,7 +798,7 @@ def create_portal():
         if file.filename == '':
             return "No file selected"
 
-        file.save(f'Functions/static/{file.filename}')
+        file.save(f'Functions/static/cool_images/{file.filename}')
 
         return "Uploaded!"
 

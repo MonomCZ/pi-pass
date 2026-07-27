@@ -1,13 +1,32 @@
 from flask import Flask, redirect, render_template, request
 import subprocess
 import time
+import os
+import random
 
 def create_portal():
     app = Flask(__name__)
 
     @app.route('/')
     def index():
-        return render_template('index.html')
+
+        image_folder='Functions/static/cool_images'
+        
+        images = [
+        f for f in os.listdir(image_folder)
+        if f.lower().endswith((
+            '.png',
+            '.jpg',
+            '.jpeg',
+            '.gif',
+            '.webp'
+        ))
+    ]
+        random_image = None
+        if images:
+            random_image = random.choice(images)
+
+        return render_template('index.html',random_image=random_image)
     
     @app.route('/upload', methods=['POST'])
     def upload():
@@ -19,7 +38,7 @@ def create_portal():
         if file.filename == '':
             return "No file selected"
 
-        file.save(f'Functions/static/{file.filename}')
+        file.save(f'Functions/static/cool_images/{file.filename}')
 
         return "Uploaded!"
 
