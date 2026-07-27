@@ -1,0 +1,7 @@
+
+co to je?
+    Cool věc co prostě funguje tak, že vidíš obrázek, který sem někdo už poslal,
+    a ty můžeš taky poslat svůj vlastní.
+
+    Je to takový malý lokální sdílení obrázků. Není to žádná normální webovka
+    na internetu, všechno běží přímo tady na té WiFi a nikde jinde. 

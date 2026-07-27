@@ -6,6 +6,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
+
+        .info-box {
+            width: min(85vw, 600px);
+
+            margin-top: 3vh;
+            padding: 25px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(255,255,255,0.18);
+
+            backdrop-filter: blur(12px);
+
+            color: white;
+
+            text-align: center;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.35);
+
+            text-shadow:
+                0 2px 4px rgba(0,0,0,0.6);
+        }
+
+
+        .info-box h2 {
+
+            margin-top: 0;
+
+            font-size: 1.8rem;
+
+        }
+
+
+        .info-box p {
+
+            font-size: 1.1rem;
+
+            line-height: 1.6;
+
+        }
+
+
+        @media(max-width:600px){
+
+            .info-box{
+                width: 80vw;
+                padding: 20px;
+            }
+
+            .info-box p{
+                font-size: 4vw;
+            }
+
+        }
+
         .portal-image {
             width: 40vw;
             max-width: 300px;
@@ -221,15 +278,15 @@
 {% endif %}
 
 <button class="frutiger-aero-button" onclick="openDialog()">
-    Add Your Own Image
+    Přidat svůj obrázek
 </button>
 
 <div class="dialog-overlay" id="dialog">
     <div class="dialog">
-        <h2>Add Your Own Image</h2>
+        <h2>Přidat svůj obrázek</h2>
 
         <p>
-            To upload your own image, open the following address in your browser:
+            Pro pridani obrazku otevři prohlížeč a zadej adresu:
         </p>
 
         <div class="address">
@@ -259,5 +316,23 @@ document.getElementById("dialog").addEventListener("click", function(e) {
 });
 </script>
 
+<div class="info-box">
+
+    <h2>Co to je?</h2>
+
+    <p>
+        Cool věc, která prostě funguje tak, že vidíš obrázek,
+        který sem někdo už poslal, a ty můžeš taky poslat svůj vlastní.
+    </p>
+
+    <p>
+        Je to takové malé lokální sdílení obrázků.
+        Není to žádná normální webovka na internetu —
+        všechno běží přímo tady na té WiFi a nikde jinde.
+    </p>
+    <p class="grey-text">
+    (a ne tohle neni nijak oficialni cokoliv xD)
+    </p>
+</div>
 </body>
 </html>
