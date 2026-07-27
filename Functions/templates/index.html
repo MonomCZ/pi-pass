@@ -300,6 +300,20 @@
 </div>
 
 <script>
+    function openInfo() {
+    document.getElementById("info-dialog").style.display = "flex";
+}
+
+function closeInfo() {
+    document.getElementById("info-dialog").style.display = "none";
+}
+
+
+document.getElementById("info-dialog").addEventListener("click", function(e) {
+    if (e.target === this) {
+        closeInfo();
+    }
+});
 function openDialog() {
     document.getElementById("dialog").style.display = "flex";
 }
@@ -316,23 +330,39 @@ document.getElementById("dialog").addEventListener("click", function(e) {
 });
 </script>
 
-<div class="info-box">
+<button class="frutiger-aero-button" onclick="openInfo()">
+    Co to je?
+</button>
 
-    <h2>Co to je?</h2>
 
-    <p>
-        Cool věc, která prostě funguje tak, že vidíš obrázek,
-        který sem někdo už poslal, a ty můžeš taky poslat svůj vlastní.
-    </p>
+<div class="dialog-overlay" id="info-dialog">
 
-    <p>
-        Je to takové malé lokální sdílení obrázků.
-        Není to žádná normální webovka na internetu —
-        všechno běží přímo tady na té WiFi a nikde jinde.
-    </p>
-    <p class="grey-text">
-    (a ne tohle neni nijak oficialni cokoliv xD)
-    </p>
+    <div class="dialog">
+
+        <h2>Co to je?</h2>
+
+        <p>
+            Cool věc, která prostě funguje tak, že vidíš obrázek,
+            který sem někdo už poslal, a ty můžeš taky poslat svůj vlastní.
+        </p>
+
+        <p>
+            Je to takové malé lokální sdílení obrázků.
+            Není to žádná normální webovka na internetu,
+            všechno běží přímo tady na té WiFi a nikde jinde.
+        </p>
+
+        <p>
+            (a ne, tohle není nijak oficiální cokoliv xD)
+        </p>
+
+
+        <button class="frutiger-aero-button" onclick="closeInfo()">
+            OK
+        </button>
+
+    </div>
+
 </div>
 </body>
 </html>
