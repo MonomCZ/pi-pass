@@ -26,7 +26,7 @@ def create_portal():
         if images:
             random_image = random.choice(images)
 
-        return render_template('index.html',random_image=random_image)
+        return render_template('no_upload.html',random_image=random_image)
     
     @app.route('/upload', methods=['POST'])
     def upload():
@@ -36,7 +36,7 @@ def create_portal():
         file = request.files['image']
 
         if file.filename == '':
-            return "No file selected"
+            return redirect('/')
 
         file.save(f'Functions/static/cool_images/{file.filename}')
 
