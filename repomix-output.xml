@@ -41,12 +41,18 @@ The content is organized as follows:
 
 <directory_structure>
 Functions/
+  static/
+    linux-tux-1-logo-png-transparent-2235685042.png
+    pozadi.png
   templates/
     index.html
+    pozadi.png
   hotspot.py
   portal.py
 Main/
   main.py
+uploads/
+  linux-tux-1-logo-png-transparent-2235685042.png
 Utility/
   SETUP.sh
   UPDATE.sh
@@ -58,23 +64,6 @@ runupdatelol.sh
 
 <files>
 This section contains the contents of the repository's files.
-
-<file path="Functions/templates/index.html">
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Portal</title>
-</head>
-<body>
-
-<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp">
-    <button type="submit">Upload</button>
-</form>
-
-</body>
-</html>
-</file>
 
 <file path="run.sh">
 cd ~/pi-pass
@@ -350,6 +339,61 @@ cd pi-pass
 ```
 </file>
 
+<file path="Functions/templates/index.html">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Portal</title>
+
+    <style>
+        body {
+            background-image: url("/static/pozadi.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp">
+    <br>
+    <input type="submit" value="Upload">
+</form>
+
+<p>Open this address in your browser:</p>
+<p>http://10.42.0.1:8080</p>
+
+</body>
+</html>
+</file>
+
+<file path="Main/main.py">
+import Functions.hotspot as hotspot
+import Functions.portal as portal
+import threading
+
+hotspot.start_hotspot()
+portal.restart_dnsmasq()
+portal.setup_portal()
+
+portal_thread = threading.Thread(
+    target=portal.create_portal
+)
+
+portal_thread.start()
+portal_thread.join()
+</file>
+
 <file path="Functions/portal.py">
 from flask import Flask, redirect, render_template, request
 import subprocess
@@ -364,8 +408,16 @@ def create_portal():
     
     @app.route('/upload', methods=['POST'])
     def upload():
+        if 'image' not in request.files:
+            return "No file"
+
         file = request.files['image']
+
+        if file.filename == '':
+            return "No file selected"
+
         file.save(f'Functions/static/{file.filename}')
+
         return "Uploaded!"
 
     @app.route('/generate_204')
@@ -412,23 +464,6 @@ def setup_portal(gateway_ip='10.42.0.1', portal_port=8080):
 def restart_dnsmasq():
     time.sleep(5)
     subprocess.run(['sudo', 'systemctl', 'restart', 'dnsmasq'], check=True)
-</file>
-
-<file path="Main/main.py">
-import Functions.hotspot as hotspot
-import Functions.portal as portal
-import threading
-
-hotspot.start_hotspot()
-portal.restart_dnsmasq()
-portal.setup_portal()
-
-portal_thread = threading.Thread(
-    target=portal.create_portal
-)
-
-portal_thread.start()
-portal_thread.join()
 </file>
 
 <file path="Functions/hotspot.py">
