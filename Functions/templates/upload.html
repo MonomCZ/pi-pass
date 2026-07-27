@@ -38,7 +38,12 @@
             font-family: Tahoma, Verdana, Geneva, sans-serif;
         }
 
-
+        form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1vw;
+        }
 
         /* Frutiger Aero Button */
         .frutiger-aero-button {
@@ -350,12 +355,12 @@
 {% endif %}
 
 
-<form action="/upload" method="post" enctype="multipart/form-data">
+<form action="/uploaded" method="post" enctype="multipart/form-data">
 
 
     <label class="frutiger-aero-button">
 
-        Choose Image
+        Vybrat Obrázek
 
         <input
             class="file-input"
@@ -371,7 +376,7 @@
         type="submit"
         class="frutiger-aero-button">
 
-        Upload
+        Poslat
 
     </button>
 
@@ -380,15 +385,6 @@
 
 
 
-<p>
-    Open this address in your browser:
-</p>
-
-
-
-<p class="address">
-    http://10.42.0.1:8080
-</p>
 
 
 

@@ -28,7 +28,7 @@ def create_portal():
 
         return render_template('index.html',random_image=random_image)
     
-    @app.route('/upload', methods=['POST'])
+    @app.route('/uploaded', methods=['POST'])
     def upload():
         if 'image' not in request.files:
             return "No file"
@@ -44,7 +44,24 @@ def create_portal():
 
     @app.route('/upload')
     def upload_page():
-        return render_template('upload.html')
+
+        image_folder='Functions/static/cool_images'
+        
+        images = [
+        f for f in os.listdir(image_folder)
+        if f.lower().endswith((
+            '.png',
+            '.jpg',
+            '.jpeg',
+            '.gif',
+            '.webp'
+        ))
+    ]
+        random_image = None
+        if images:
+            random_image = random.choice(images)
+
+        return render_template('upload.html',random_image=random_image)
 
     @app.route('/generate_204')
     @app.route('/gen_204')
