@@ -7,3 +7,6 @@ cd ~
 git clone --recursive https://github.com/MonomCZ/pi-pass.git
 cd pi-pass
 ```
+
+
+ps. zakaz vstupu furrikum co se jmenujou filip
