@@ -9,4 +9,4 @@ cd pi-pass
 ```
 
 
-ps. zakaz vstupu furrikum co se jmenujou filip
+ps. zakaz vstupu furrykum co se jmenujou filip
