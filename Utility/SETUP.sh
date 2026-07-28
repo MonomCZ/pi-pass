@@ -1,8 +1,13 @@
 sudo apt update
 sudo apt upgrade -y
 
-sudo apt install -y dnsmasq python3-flask iptables network-manager
+sudo apt install -y dnsmasq python3-flask iptables network-manager python3-pip python3-pil python3-smbus i2c-tools
+pip3 install --break-system-packages adafruit-blinka adafruit-circuitpython-ssd1306
 
+#i2c this is needed for the oled display
+sudo raspi-config nonint do_i2c 0
+
+#setup dnsmasq
 echo "interface=wlan0
 
 dhcp-range=10.42.0.10,10.42.0.100,12h
