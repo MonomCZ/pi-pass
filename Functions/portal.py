@@ -3,9 +3,12 @@ import subprocess
 import time
 import os
 import random
+import uuid
+from werkzeug.utils import secure_filename
 
 def create_portal():
     app = Flask(__name__)
+    app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024  # 50 MB
 
     @app.route('/')
     def index():
@@ -38,7 +41,16 @@ def create_portal():
         if file.filename == '':
             return redirect('/')
 
-        file.save(f'Functions/static/cool_images/{file.filename}')
+        
+        extension = os.path.splitext(secure_filename(file.filename))[1].lower()
+
+        # generates like random nonsense filename with the same extension as the original file
+        new_filename = f"{uuid.uuid4().hex}{extension}"
+
+        file.save(os.path.join(
+            "Functions/static/cool_images",
+            new_filename
+        ))
 
         return "Uploaded!"
 
@@ -62,6 +74,10 @@ def create_portal():
             random_image = random.choice(images)
 
         return render_template('upload.html',random_image=random_image)
+
+    @app.errorhandler(413)
+    def too_large(e):
+        return "Obrázek je příliš velký. Maximální velikost je 50 MB.", 413
 
     @app.route('/generate_204')
     @app.route('/gen_204')
